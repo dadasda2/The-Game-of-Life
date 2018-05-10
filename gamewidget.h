@@ -8,7 +8,7 @@ class GameWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GameWidget(QWidget *parent = 0);
+     GameWidget(QWidget *parent = 0);
     ~GameWidget();
 
 protected:
@@ -17,10 +17,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
 
 public slots:
-    void startGame(); // start
-    void stopGame(); // finish
-    void clear(); // clear
-
+    void startGame();
+    void stopGame();
+    void clear();
     int interval(); // interval between generations
     void setInterval(int msec); // set interval between generations
 
@@ -35,7 +34,7 @@ private:
     QTimer* timer;
     bool   grid[50][50];
     bool  ngrid[50][50];
-    bool isAlive(int x, int y); // return true if universe[k][j] accept rules
+    bool isAlive(int x, int y); // return true if cell accept rules
 };
 
 #endif // GAMEWIDGET_H

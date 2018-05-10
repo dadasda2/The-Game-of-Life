@@ -64,7 +64,7 @@ void GameWidget::setInterval(int msec)
 bool GameWidget::isAlive(int x, int y)
 {
     int count = 0;
-    int xp = x;
+    int xp = x;            //thor logic
     int xm = x;
     int yp = y;
     int ym = y;
@@ -75,7 +75,7 @@ bool GameWidget::isAlive(int x, int y)
     if((x + 1) == gridSize)
         xp = -1;
     if((y + 1) == gridSize)
-        yp = -1;
+        yp = -1;                //thor logic
     count =   grid[xm - 1][ym - 1] + grid[x][ym - 1] + grid[xp + 1][ym - 1]
             + grid[xm - 1][y]                        + grid[xp + 1][y]
             + grid[xm - 1][yp + 1] + grid[x][yp + 1] + grid[xp + 1][yp + 1];
@@ -86,13 +86,23 @@ bool GameWidget::isAlive(int x, int y)
 
 void GameWidget::newGeneration()
 {
+    int count = 0;
     for(int i = 0; i < gridSize; i++)
         for(int j = 0; j < gridSize; j++)
             ngrid[i][j] = isAlive(i, j);
     for(int i = 0; i < gridSize; i++) {
         for(int j = 0; j < gridSize; j++) {
+            if(grid[i][j] == ngrid[i][j])
+                count++;
             grid[i][j] = ngrid[i][j];
         }
+    }
+    if(count == (gridSize * gridSize)){
+        stopGame();
+        QMessageBox::information(this,
+                                 tr("Game lost sense"),
+                                 tr("All the next generations will be the same."),
+                                 QMessageBox::Ok);
     }
     update();
 }
@@ -149,15 +159,15 @@ void GameWidget::paintUniverse(QPainter &p)
         QRectF r(left, top, (qreal)cellWidth, (qreal)cellHeight);
         p.fillRect(r, QBrush(QColor(255,128,141,255))); // fill cell with color
     }
-        for(int i = 0; i < gridSize; i++)
+    for(int i = 0; i < gridSize; i++)
         for(int j = 0; j < gridSize; j++) {
             if(grid[i][j] == true) { // if there is any sense to paint it
                 qreal left = (qreal)(cellWidth*(j+1)  - cellWidth); // margin from left
                 qreal top  = (qreal)(cellHeight*(i+1) - cellHeight); // margin from top
                 QRectF r(left, top, (qreal)cellWidth, (qreal)cellHeight);
                 p.fillRect(r, QBrush(QColor((i*i + j*j)%color[0],(i*i * j*j)%color[1],abs(i*i - j*j)%color[2],255))); // fill cell with color
-}
-}
+            }
+        }
 
 
 }
